@@ -2,15 +2,34 @@
   <div class="index">
     <el-container>
       <el-header>
-        <h1>MMALL ADMIN</h1>
+        <h1 @click="home">MMALL ADMIN</h1>
         <div>
           <span style="marginRight:20px">欢迎，{{ username }}</span>
           <span style="color:#337AB7" @click="logoutClick">退出</span>
         </div>
       </el-header>
       <el-container>
-        <el-aside width="200px">Aside</el-aside>
-        <el-main>Main</el-main>
+        <el-aside width="250px">
+          <ul>
+            <li>
+              <p class="shou" @click="home">
+                <i class="el-icon-platform-eleme"></i>Home
+              </p>
+            </li>
+            <li>
+              <p><i class="el-icon-data-analysis"></i>商品</p>
+              <p class="er shou" @click="product">
+                商品管理
+              </p>
+              <p class="er shou" @click="category">品类管理</p>
+            </li>
+            <li>
+              <p><i class="el-icon-thumb"></i>订单</p>
+              <p class="er shou" @click="order">订单管理</p>
+            </li>
+          </ul>
+        </el-aside>
+        <el-main><router-view></router-view></el-main>
       </el-container>
     </el-container>
   </div>
@@ -25,6 +44,22 @@ export default {
     };
   },
   methods: {
+    // 去首页
+    home() {
+      this.$router.push("/home");
+    },
+    // 商品管理
+    product() {
+      this.$router.push("/product");
+    },
+    // 品类管理
+    category() {
+      this.$router.push("/category");
+    },
+    // 订单管理
+    order() {
+      this.$router.push("/order");
+    },
     async logoutClick() {
       let { data: res } = await this.$axios.logout();
       console.log(res);
@@ -54,6 +89,7 @@ export default {
       justify-content: space-between;
       & > h1 {
         font-size: 24px;
+        cursor: pointer;
       }
       & > div {
         & > span:nth-of-type(2) {
@@ -65,14 +101,30 @@ export default {
       & > .el-aside {
         background-color: #f8f8f8;
         color: #333;
-        text-align: center;
-        line-height: 200px;
+        & > ul {
+          & > li {
+            border-bottom: 1px solid #e7e7e7;
+            color: #337ac6;
+            font-size: 14px;
+            & > p {
+              padding: 10px 15px;
+            }
+            & > p:hover {
+              background: #eeeeee;
+            }
+            & > p.er {
+              padding-left: 38px;
+            }
+            & > p.shou {
+              cursor: pointer;
+            }
+          }
+        }
       }
 
       & > .el-main {
         background-color: #fff;
         color: #333;
-        text-align: center;
         min-height: 568px;
       }
     }
