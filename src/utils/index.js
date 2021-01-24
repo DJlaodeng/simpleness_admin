@@ -13,6 +13,10 @@ const API = {
   login(params) {
     return request(METHODS.POST, URL.LOGIN, qs.stringify(params));
   },
+  // 退出
+  logout() {
+    return request(METHODS.POST, URL.LOGOUT);
+  },
 
   // 注册
   register() {}

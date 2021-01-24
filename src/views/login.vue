@@ -34,8 +34,8 @@ export default {
   data() {
     return {
       ruleForm: {
-        username: "",
-        password: ""
+        username: "admin",
+        password: "admin"
       },
       rules: {
         username: [
@@ -54,6 +54,7 @@ export default {
         if (res.status != 0) {
           this.$message.error(res.msg);
         } else {
+          sessionStorage.setItem("username", res.data.username);
           this.$message.success(res.msg);
           this.$router.push("/index");
         }
