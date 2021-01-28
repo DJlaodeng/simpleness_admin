@@ -29,6 +29,7 @@ const routes = [
       {
         path: "/product",
         name: "product",
+        meta: ["商品管理"],
         component: () => import("../views/Product.vue")
       },
       {

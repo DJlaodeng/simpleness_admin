@@ -9,15 +9,17 @@ import { Loading } from "element-ui";
 // 定义loading
 var loadingInstance;
 // 根据环境不同引入不同baseApi地址
-import { baseApi } from "@/config";
-console.log(baseApi);
+// import { baseApi } from "@/config";
+// console.log(baseApi);
 
 // 定义基础路径
 // const BASEURL = "http://admintest.happymmall.com/";
+const BASEURL = "/api";
 // 创建 axios 配置实例
 const service = axios.create({
-  baseURL: baseApi, //  默认会拼接到请求路径前面
-  timeout: 6000 //  请求超时
+  baseURL: BASEURL, //  默认会拼接到请求路径前面
+  timeout: 6000, //  请求超时
+  withCredentials: true // 允许携带cookie
 });
 
 // 请求发送前，弹出loading组件

@@ -60,10 +60,12 @@ export default {
     order() {
       this.$router.push("/order");
     },
+    // 退出
     async logoutClick() {
       let { data: res } = await this.$axios.logout();
       console.log(res);
       if (res.status === 0) {
+        sessionStorage.clear();
         this.$message.info("退出成功！");
         this.$router.push("/login");
       } else {

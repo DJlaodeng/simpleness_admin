@@ -21,7 +21,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="submitForm('ruleForm')"
-          >登录</el-button
+          >Login</el-button
         >
       </el-form-item>
     </el-form>
@@ -69,9 +69,10 @@ export default {
 .login {
   width: 100%;
   height: 100%;
-  background: #324057;
+  background: #f5f5f5;
 
   & > .el-form {
+    border: 1px solid #ddd;
     width: 370px;
     height: 225px;
     background: #fff;

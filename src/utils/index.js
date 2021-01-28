@@ -17,6 +17,10 @@ const API = {
   logout() {
     return request(METHODS.POST, URL.LOGOUT);
   },
+  // 商品管理表格数据
+  product(params) {
+    return request(METHODS.GET, URL.PRODUCT + qs.stringify(params));
+  },
 
   // 注册
   register() {}
