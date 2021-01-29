@@ -59,6 +59,13 @@
       </el-table-column>
     </el-table>
     <!-- 分页器 -->
+    <el-pagination
+      background
+      layout="prev, pager, next"
+      :total="total"
+      @current-change="pageClick"
+    >
+    </el-pagination>
   </div>
 </template>
 
@@ -74,7 +81,8 @@ export default {
         region: "按商品ID查询"
       },
       tableData: [],
-      pageNum: 1
+      pageNum: 1,
+      total: 0
     };
   },
   mounted() {
@@ -86,6 +94,7 @@ export default {
       let { data: res } = await this.$axios.product({ pageNum: this.pageNum });
       console.log(res);
       this.tableData = res.data.list;
+      this.total = res.data.total;
     },
     // 查询
     onInquire() {
@@ -94,7 +103,12 @@ export default {
     // 查看
     lookClick() {},
     // 编辑
-    editClick() {}
+    editClick() {},
+    pageClick(q) {
+      console.log(q);
+      this.pageNum = q;
+      this.getTableData();
+    }
   }
 };
 </script>
@@ -104,6 +118,9 @@ export default {
   .mini {
     padding: 5px;
     margin-left: 3px;
+  }
+  .el-pagination {
+    margin-top: 20px;
   }
 }
 </style>
