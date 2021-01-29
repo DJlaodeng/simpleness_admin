@@ -6,8 +6,8 @@
     <el-form :inline="true" :model="formInline" class="demo-form-inline">
       <el-form-item>
         <el-select v-model="formInline.region">
-          <el-option label="按商品ID查询" value="shanghai"></el-option>
-          <el-option label="按商品名称查询" value="beijing"></el-option>
+          <el-option label="按商品ID查询" value="按商品ID查询"></el-option>
+          <el-option label="按商品名称查询" value="按商品名称查询"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -99,6 +99,33 @@ export default {
     // 查询
     onInquire() {
       console.log("submit!");
+      if (this.formInline.region == "按商品ID查询") {
+        console.log("按商品ID查询");
+        this.$axios
+          .search({
+            listType: "search",
+            pageNum: this.pageNum,
+            productId: this.formInline.search
+          })
+          .then(res => {
+            console.log(res);
+            this.tableData = res.data.data.list;
+            this.total = res.data.data.total;
+          });
+      } else {
+        console.log("按商品名称查询");
+        this.$axios
+          .search({
+            listType: "search",
+            pageNum: this.pageNum,
+            productName: this.formInline.search
+          })
+          .then(res => {
+            console.log(res);
+            this.tableData = res.data.data.list;
+            this.total = res.data.data.total;
+          });
+      }
     },
     // 查看
     lookClick() {},
@@ -107,7 +134,7 @@ export default {
     pageClick(q) {
       console.log(q);
       this.pageNum = q;
-      this.getTableData();
+      this.onInquire();
     }
   }
 };

@@ -4,5 +4,7 @@ export default {
   // 退出登录
   LOGOUT: "user/logout.do",
   // 商品管理表格数据
-  PRODUCT: "manage/product/list.do?"
+  PRODUCT: "manage/product/list.do?",
+  // 商品管理查询
+  SEARCH: "manage/product/search.do?"
 };
