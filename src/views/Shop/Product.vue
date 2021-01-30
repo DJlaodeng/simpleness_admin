@@ -29,22 +29,26 @@
       <el-table-column prop="price" label="价格"> </el-table-column>
       <el-table-column prop="status" label="状态">
         <template slot-scope="scope">
-          <span v-if="scope.row.status == 1">在售</span>
-          <span v-if="scope.row.status == 2">已下架</span>
-          <el-button
-            class="mini"
-            size="mini"
-            type="warning"
-            v-if="scope.row.status == 1"
-            >下架</el-button
-          >
-          <el-button
-            class="mini"
-            size="mini"
-            type="warning"
-            v-if="scope.row.status == 2"
-            >上架</el-button
-          >
+          <div v-if="scope.row.status == 1">
+            <span>在售</span>
+            <el-button
+              class="mini"
+              size="mini"
+              type="warning"
+              @click="statusClick(scope.row.id)"
+              >下架</el-button
+            >
+          </div>
+          <div v-if="scope.row.status == 2">
+            <span>已下架</span>
+            <el-button
+              class="mini"
+              size="mini"
+              type="warning"
+              @click="statusClicks(scope.row.id)"
+              >上架</el-button
+            >
+          </div>
         </template>
       </el-table-column>
       <el-table-column label="操作">
@@ -70,7 +74,7 @@
 </template>
 
 <script>
-import Breadcrumb from "../components/Breadcrumb";
+import Breadcrumb from "../../components/Breadcrumb";
 export default {
   name: "Product",
   components: { Breadcrumb },
@@ -128,13 +132,76 @@ export default {
       }
     },
     // 查看
-    lookClick() {},
+    lookClick() {
+      this.$router.push("/detail");
+    },
     // 编辑
     editClick() {},
+    // 分页
     pageClick(q) {
       console.log(q);
       this.pageNum = q;
       this.onInquire();
+    },
+    // 下架按钮
+    statusClick(id) {
+      console.log(id);
+      this.$confirm("确认要下架该商品？", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          this.$message({
+            type: "success",
+            message: "修改产品销售状态成功!"
+          });
+          this.$axios
+            .status({
+              productId: id,
+              status: 2
+            })
+            .then(res => {
+              console.log(res);
+              this.onInquire();
+            });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消修改"
+          });
+        });
+    },
+    // 下架按钮
+    statusClicks(id) {
+      console.log(id);
+      this.$confirm("确认要上架该商品？", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          this.$message({
+            type: "success",
+            message: "修改产品销售状态成功!"
+          });
+          this.$axios
+            .status({
+              productId: id,
+              status: 1
+            })
+            .then(res => {
+              console.log(res);
+              this.onInquire();
+            });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消修改"
+          });
+        });
     }
   }
 };

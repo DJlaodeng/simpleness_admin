@@ -25,6 +25,10 @@ const API = {
   search(params) {
     return request(METHODS.GET, URL.SEARCH + qs.stringify(params));
   },
+  // 商品管理查询
+  status(params) {
+    return request(METHODS.GET, URL.STATUS + qs.stringify(params));
+  },
 
   // 注册
   register() {}
