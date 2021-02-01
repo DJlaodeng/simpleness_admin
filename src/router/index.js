@@ -23,26 +23,32 @@ const routes = [
       {
         path: "/home",
         name: "Home",
-        meta: ["Home"],
+        meta: { name: ["Home"] },
         component: () => import("../views/Home.vue")
       },
       {
         path: "/product",
         name: "product",
-        meta: ["商品管理"],
+        meta: { name: ["商品管理"], btn: ["添加商品"] },
         component: () => import("../views/Shop/Product.vue")
       },
       {
         path: "/detail",
         name: "detail",
-        meta: ["商品管理", "商品详情"],
+        meta: { name: ["商品管理", "商品详情"] },
         component: () => import("../views/Shop/Product/Detail.vue")
       },
       {
         path: "/edit",
         name: "edit",
-        meta: ["商品管理", "修改商品"],
+        meta: { name: ["商品管理", "修改商品"] },
         component: () => import("../views/Shop/Product/Edit.vue")
+      },
+      {
+        path: "/add",
+        name: "add",
+        meta: { name: ["商品管理", "添加商品"] },
+        component: () => import("../views/Shop/Product/Add.vue")
       },
       {
         path: "/category",
