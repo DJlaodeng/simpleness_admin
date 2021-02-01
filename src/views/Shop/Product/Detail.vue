@@ -1,65 +1,98 @@
 <template>
   <div>
+    <Breadcrumb></Breadcrumb>
     <el-form ref="form" :model="form" label-width="80px">
-      <el-form-item label="活动名称">
-        <el-input v-model="form.name"></el-input>
+      <el-form-item label="商品名称">{{ form.name }} </el-form-item>
+      <el-form-item label="商品描述"> {{ form.subtitle }}</el-form-item>
+      <el-form-item label="当前状态">
+        <p v-if="form.status == 1">在售</p>
+        <p v-if="form.status == 2">已下架</p>
       </el-form-item>
-      <el-form-item label="活动区域">
-        <el-select v-model="form.region" placeholder="请选择活动区域">
-          <el-option label="区域一" value="shanghai"></el-option>
-          <el-option label="区域二" value="beijing"></el-option>
+      <el-form-item label="所属分类">
+        <el-select v-model="form.region">
+          <el-option label="请选择一级品类"></el-option>
+          <el-option
+            v-for="item in category"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          ></el-option>
+        </el-select>
+        <el-select v-model="form.regions">
+          <el-option label="请选择er级品类"></el-option>
+          <el-option
+            v-for="item in categorys"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="活动时间">
-        <el-col :span="11">
-          <el-date-picker
-            type="date"
-            placeholder="选择日期"
-            v-model="form.date1"
-            style="width: 100%;"
-          ></el-date-picker>
-        </el-col>
-        <el-col class="line" :span="2">-</el-col>
-        <el-col :span="11">
-          <el-time-picker
-            placeholder="选择时间"
-            v-model="form.date2"
-            style="width: 100%;"
-          ></el-time-picker>
-        </el-col>
+      <el-form-item label="商品价格">
+        <el-input placeholder="请输入内容" v-model="form.price" disabled>
+          <template slot="append">元</template>
+        </el-input>
       </el-form-item>
-      <el-form-item label="即时配送">
-        <el-switch v-model="form.delivery"></el-switch>
+      <el-form-item label="商品库存">
+        <el-input placeholder="请输入内容" v-model="form.stock" disabled>
+          <template slot="append">件</template>
+        </el-input>
       </el-form-item>
-      <el-form-item label="活动性质">
-        <el-checkbox-group v-model="form.type">
-          <el-checkbox label="美食/餐厅线上活动" name="type"></el-checkbox>
-          <el-checkbox label="地推活动" name="type"></el-checkbox>
-          <el-checkbox label="线下主题活动" name="type"></el-checkbox>
-          <el-checkbox label="单纯品牌曝光" name="type"></el-checkbox>
-        </el-checkbox-group>
+      <el-form-item label="商品图片">
+        <img style="width: 100px; height: 100px" :src="form.imageHost" />
       </el-form-item>
-      <el-form-item label="特殊资源">
-        <el-radio-group v-model="form.resource">
-          <el-radio label="线上品牌商赞助"></el-radio>
-          <el-radio label="线下场地免费"></el-radio>
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item label="活动形式">
-        <el-input type="textarea" v-model="form.desc"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="onSubmit">立即创建</el-button>
-        <el-button>取消</el-button>
+      <el-form-item label="商品详情"
+        ><p v-html="form.detail"></p>
       </el-form-item>
     </el-form>
   </div>
 </template>
 
 <script>
+import Breadcrumb from "../../../components/Breadcrumb";
 export default {
-  name: "Detail"
+  name: "Detail",
+  components: { Breadcrumb },
+  data() {
+    return {
+      form: { region: "", regions: "" },
+      category: [],
+      categorys: []
+    };
+  },
+  mounted() {
+    this.getData();
+  },
+  methods: {
+    getData() {
+      this.$axios.look({ productId: this.$store.state.lookId }).then(res => {
+        console.log(res);
+        this.form = res.data.data;
+        console.log(this.form);
+        this.$axios.categoryId({ categoryId: 0 }).then(res => {
+          console.log(res);
+          this.category = res.data.data;
+        });
+        this.$axios
+          .categoryId({ categoryId: this.form.parentCategoryId })
+          .then(res => {
+            console.log(res);
+            this.categorys = res.data.data;
+          });
+      });
+    },
+    onSubmit() {
+      console.log("submit!");
+    }
+  }
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.el-form {
+  margin-left: 150px;
+  .el-input {
+    width: 300px;
+  }
+}
+</style>

@@ -8,5 +8,9 @@ export default {
   // 商品管理查询
   SEARCH: "manage/product/search.do?",
   // 切换上下架
-  STATUS: "manage/product/set_sale_status.do?"
+  STATUS: "manage/product/set_sale_status.do?",
+  // 商品管理 查看
+  LOOK: "manage/product/detail.do?",
+  // 商品管理 查看 分类
+  CATEGROYID: "manage/category/get_category.do?"
 };

@@ -29,6 +29,14 @@ const API = {
   status(params) {
     return request(METHODS.GET, URL.STATUS + qs.stringify(params));
   },
+  // 商品管理查看
+  look(params) {
+    return request(METHODS.GET, URL.LOOK + qs.stringify(params));
+  },
+  // 商品管理 查看 分类
+  categoryId(params) {
+    return request(METHODS.GET, URL.CATEGROYID + qs.stringify(params));
+  },
 
   // 注册
   register() {}

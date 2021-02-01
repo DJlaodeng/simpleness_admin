@@ -53,10 +53,10 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button @click="lookClick(scope.row)" type="text" size="small"
+          <el-button @click="lookClick(scope.row.id)" type="text" size="small"
             >查看</el-button
           >
-          <el-button @click="editClick(scope.row)" type="text" size="small"
+          <el-button @click="editClick(scope.row.id)" type="text" size="small"
             >编辑</el-button
           >
         </template>
@@ -132,11 +132,17 @@ export default {
       }
     },
     // 查看
-    lookClick() {
+    lookClick(id) {
+      console.log(id);
+      this.$store.commit("getLookId", id);
       this.$router.push("/detail");
     },
     // 编辑
-    editClick() {},
+    editClick(id) {
+      console.log(id);
+      this.$store.commit("getEditId", id);
+      this.$router.push("/edit");
+    },
     // 分页
     pageClick(q) {
       console.log(q);
@@ -173,7 +179,7 @@ export default {
           });
         });
     },
-    // 下架按钮
+    // 上架按钮
     statusClicks(id) {
       console.log(id);
       this.$confirm("确认要上架该商品？", "提示", {

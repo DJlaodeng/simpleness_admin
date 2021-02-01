@@ -30,14 +30,19 @@ const routes = [
         path: "/product",
         name: "product",
         meta: ["商品管理"],
-        component: () => import("../views/Shop/Product.vue"),
-        children: [
-          {
-            path: "/detail",
-            name: "detail",
-            component: () => import("../views/Shop/Product/Detail.vue")
-          }
-        ]
+        component: () => import("../views/Shop/Product.vue")
+      },
+      {
+        path: "/detail",
+        name: "detail",
+        meta: ["商品管理", "商品详情"],
+        component: () => import("../views/Shop/Product/Detail.vue")
+      },
+      {
+        path: "/edit",
+        name: "edit",
+        meta: ["商品管理", "修改商品"],
+        component: () => import("../views/Shop/Product/Edit.vue")
       },
       {
         path: "/category",
