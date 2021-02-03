@@ -39,7 +39,7 @@
         </el-input>
       </el-form-item>
       <el-form-item label="商品图片">
-        <img style="width: 100px; height: 100px" :src="form.imageHost" />
+        <img style="width: 100px; height: 100px" :src="form.subImages" />
       </el-form-item>
       <el-form-item label="商品详情">
         <quill-editor

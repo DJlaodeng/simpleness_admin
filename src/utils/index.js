@@ -37,6 +37,10 @@ const API = {
   categoryId(params) {
     return request(METHODS.GET, URL.CATEGROYID + qs.stringify(params));
   },
+  // 商品管理 查看 提交按钮
+  editSubmit(params) {
+    return request(METHODS.GET, URL.EDITSUBMIT + qs.stringify(params));
+  },
 
   // 注册
   register() {}

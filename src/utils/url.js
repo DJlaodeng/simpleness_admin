@@ -12,5 +12,7 @@ export default {
   // 商品管理 查看
   LOOK: "manage/product/detail.do?",
   // 商品管理 查看 分类
-  CATEGROYID: "manage/category/get_category.do?"
+  CATEGROYID: "manage/category/get_category.do?",
+  // 商品管理 编辑 提交按钮
+  EDITSUBMIT: "manage/product/save.do?"
 };

@@ -9,9 +9,12 @@
         >
       </el-breadcrumb>
     </div>
-    <el-button type="primary" icon="el-icon-plus">{{
-      $route.meta.btn[0]
-    }}</el-button>
+    <el-button
+      v-if="$route.meta.name.length == 1"
+      type="primary"
+      icon="el-icon-plus"
+      >{{ $route.meta.btn[0] }}</el-button
+    >
   </section>
 </template>
 

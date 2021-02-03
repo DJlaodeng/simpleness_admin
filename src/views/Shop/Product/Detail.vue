@@ -13,7 +13,7 @@
           <el-option label="请选择一级品类"></el-option>
           <el-option
             v-for="item in category"
-            :key="item.id"
+            :key="item.parentCategoryId"
             :label="item.name"
             :value="item.id"
           ></el-option>
@@ -39,7 +39,7 @@
         </el-input>
       </el-form-item>
       <el-form-item label="商品图片">
-        <img style="width: 100px; height: 100px" :src="form.imageHost" />
+        <img style="width: 100px; height: 100px" :src="form.subImages" />
       </el-form-item>
       <el-form-item label="商品详情"
         ><p v-html="form.detail"></p>
@@ -55,7 +55,7 @@ export default {
   components: { Breadcrumb },
   data() {
     return {
-      form: { region: "", regions: "" },
+      form: { region: "", regions: "", subImages: "" },
       category: [],
       categorys: []
     };
@@ -69,16 +69,17 @@ export default {
         console.log(res);
         this.form = res.data.data;
         console.log(this.form);
+        console.log(this.form.subImages);
         this.$axios.categoryId({ categoryId: 0 }).then(res => {
           console.log(res);
           this.category = res.data.data;
-        });
-        this.$axios
-          .categoryId({ categoryId: this.form.parentCategoryId })
-          .then(res => {
+          this.form.region = this.form.parentCategoryId;
+          this.$axios.categoryId({ categoryId: this.form.region }).then(res => {
             console.log(res);
             this.categorys = res.data.data;
+            this.form.regions = this.form.categoryId;
           });
+        });
       });
     },
     onSubmit() {

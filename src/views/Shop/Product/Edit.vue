@@ -13,7 +13,7 @@
           <el-option label="请选择一级品类"></el-option>
           <el-option
             v-for="item in category"
-            :key="item.id"
+            :key="item.parentCategoryId"
             :label="item.name"
             :value="item.id"
           ></el-option>
@@ -58,7 +58,6 @@
           enctype="multipart/form-data"
           id="uploadFormMulti"
         >
-          <p v-html="form.detail"></p>
           <input
             style="display: none"
             :id="uniqueId"
@@ -70,8 +69,10 @@
           />
         </form>
       </el-form-item>
+      <el-form-item> </el-form-item>
+      <el-form-item> </el-form-item>
       <el-form-item>
-        <el-button type="primary">提交</el-button>
+        <el-button type="primary" @click="onSubmit">提交</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -90,25 +91,27 @@ import { quillEditor } from "vue-quill-editor";
 const toolbarOptions = [
   ["bold", "italic", "underline", "strike"], // 加粗 斜体 下划线 删除线 -----['bold', 'italic', 'underline', 'strike']
   ["blockquote", "code-block"], // 引用  代码块-----['blockquote', 'code-block']
-  [{ header: 1 }, { header: 2 }], // 1、2 级标题-----[{ header: 1 }, { header: 2 }]
   [{ list: "ordered" }, { list: "bullet" }], // 有序、无序列表-----[{ list: 'ordered' }, { list: 'bullet' }]
-  [{ script: "sub" }, { script: "super" }], // 上标/下标-----[{ script: 'sub' }, { script: 'super' }]
   [{ indent: "-1" }, { indent: "+1" }], // 缩进-----[{ indent: '-1' }, { indent: '+1' }]
-  [{ direction: "rtl" }], // 文本方向-----[{'direction': 'rtl'}]
-  [{ size: ["small", false, "large", "huge"] }], // 字体大小-----[{ size: ['small', false, 'large', 'huge'] }]
-  [{ header: [1, 2, 3, 4, 5, 6, false] }], // 标题-----[{ header: [1, 2, 3, 4, 5, 6, false] }]
-  [{ color: [] }, { background: [] }], // 字体颜色、字体背景颜色-----[{ color: [] }, { background: [] }]
-  [{ font: [] }], // 字体种类-----[{ font: [] }]
-  [{ align: [] }], // 对齐方式-----[{ align: [] }]
-  ["clean"], // 清除文本格式-----['clean']
-  ["image", "video"] // 链接、图片、视频-----['link', 'image', 'video']
+  ["link", "image", "video"] // 链接、图片、视频-----['link', 'image', 'video']
 ];
 export default {
   name: "Edit",
   components: { Breadcrumb, quillEditor },
   data() {
     return {
-      form: { region: "", regions: "" },
+      form: {
+        name: "",
+        subtitle: "",
+        price: "",
+        stock: "",
+        region: "",
+        categoryvalue: "",
+        regions: "",
+        categorysvalue: "",
+        subImages: "",
+        content: ""
+      },
       category: [],
       categorys: [],
       uniqueId: "uniqueId",
@@ -142,26 +145,47 @@ export default {
     }
   },
   methods: {
+    // 提交按钮
+    onSubmit() {
+      // console.log("submit!");
+      this.$axios
+        .editSubmit({
+          categoryId: 100094,
+          name: this.form.name,
+          subtitle: this.form.subtitle,
+          subImages: this.form.subImages,
+          detail: this.form.content,
+          price: this.form.price,
+          stock: this.form.stock,
+          status: this.form.status,
+          id: this.form.id
+        })
+        .then(res => {
+          console.log(res);
+          this.$router.push("/product");
+        });
+    },
+    // 获取数据
     getData() {
-      this.$axios.look({ productId: this.$store.state.lookId }).then(res => {
+      console.log(this.$store.state.editId);
+      this.$axios.look({ productId: this.$store.state.editId }).then(res => {
         console.log(res);
         this.form = res.data.data;
         console.log(this.form);
+        console.log(this.form.subImages);
         this.$axios.categoryId({ categoryId: 0 }).then(res => {
           console.log(res);
           this.category = res.data.data;
-        });
-        this.$axios
-          .categoryId({ categoryId: this.form.parentCategoryId })
-          .then(res => {
+          this.form.region = this.form.parentCategoryId;
+          this.$axios.categoryId({ categoryId: this.form.region }).then(res => {
             console.log(res);
             this.categorys = res.data.data;
+            this.form.regions = this.form.categoryId;
           });
+        });
       });
     },
-    onSubmit() {
-      console.log("submit!");
-    },
+
     // 准备富文本编辑器
     onEditorReady() {},
     // 富文本编辑器 失去焦点事件
