@@ -13,7 +13,7 @@
           <el-option label="请选择一级品类"></el-option>
           <el-option
             v-for="item in category"
-            :key="item.parentCategoryId"
+            :key="item.id"
             :label="item.name"
             :value="item.id"
           ></el-option>

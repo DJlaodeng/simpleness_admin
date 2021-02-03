@@ -9,16 +9,16 @@
         <el-input v-model="form.subtitle"></el-input>
       </el-form-item>
       <el-form-item label="所属分类">
-        <el-select v-model="form.region">
+        <el-select v-model="form.region" @change="changeOne">
           <el-option label="请选择一级品类"></el-option>
           <el-option
             v-for="item in category"
-            :key="item.parentCategoryId"
+            :key="item.id"
             :label="item.name"
             :value="item.id"
           ></el-option>
         </el-select>
-        <el-select v-model="form.regions">
+        <el-select v-model="form.regions" @change="changeTwo">
           <el-option label="请选择er级品类"></el-option>
           <el-option
             v-for="item in categorys"
@@ -145,16 +145,26 @@ export default {
     }
   },
   methods: {
+    // 一级分类
+    changeOne(val) {
+      console.log(val);
+      this.form.categoryvalue = val;
+    },
+    // er 级分类
+    changeTwo(val) {
+      console.log(val);
+      // this.form.categorysvalue = val;
+    },
     // 提交按钮
     onSubmit() {
       // console.log("submit!");
       this.$axios
         .editSubmit({
-          categoryId: 100094,
+          categoryId: this.form.categoryId,
           name: this.form.name,
           subtitle: this.form.subtitle,
           subImages: this.form.subImages,
-          detail: this.form.content,
+          detail: this.content,
           price: this.form.price,
           stock: this.form.stock,
           status: this.form.status,
@@ -171,6 +181,7 @@ export default {
       this.$axios.look({ productId: this.$store.state.editId }).then(res => {
         console.log(res);
         this.form = res.data.data;
+        this.content = res.data.data.detail;
         console.log(this.form);
         console.log(this.form.subImages);
         this.$axios.categoryId({ categoryId: 0 }).then(res => {
