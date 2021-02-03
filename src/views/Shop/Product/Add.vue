@@ -9,7 +9,7 @@
         <el-input v-model="form.subtitle"></el-input>
       </el-form-item>
       <el-form-item label="所属分类">
-        <el-select v-model="form.region">
+        <el-select v-model="form.region" @change="changeOne">
           <el-option label="请选择一级品类"></el-option>
           <el-option
             v-for="item in category"
@@ -18,7 +18,7 @@
             :value="item.id"
           ></el-option>
         </el-select>
-        <el-select v-model="form.regions">
+        <el-select v-model="form.regions" @change="changeTwo">
           <el-option label="请选择er级品类"></el-option>
           <el-option
             v-for="item in categorys"
@@ -39,7 +39,25 @@
         </el-input>
       </el-form-item>
       <el-form-item label="商品图片">
-        <img style="width: 100px; height: 100px" :src="form.subImages" />
+        <el-upload action="#" list-type="picture-card" :auto-upload="false">
+          <i slot="default" class="el-icon-plus"></i>
+          <div slot="file" slot-scope="{ file }">
+            <img
+              class="el-upload-list__item-thumbnail"
+              :src="file.url"
+              alt=""
+            />
+            <span class="el-upload-list__item-actions">
+              <span
+                v-if="!disabled"
+                class="el-upload-list__item-delete"
+                @click="handleRemove(file)"
+              >
+                <i class="el-icon-delete"></i>
+              </span>
+            </span>
+          </div>
+        </el-upload>
       </el-form-item>
       <el-form-item label="商品详情">
         <quill-editor
@@ -58,7 +76,6 @@
           enctype="multipart/form-data"
           id="uploadFormMulti"
         >
-          <p v-html="form.detail"></p>
           <input
             style="display: none"
             :id="uniqueId"
@@ -70,8 +87,10 @@
           />
         </form>
       </el-form-item>
+      <el-form-item> </el-form-item>
+      <el-form-item> </el-form-item>
       <el-form-item>
-        <el-button type="primary">提交</el-button>
+        <el-button type="primary" @click="onSubmit">提交</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -90,27 +109,32 @@ import { quillEditor } from "vue-quill-editor";
 const toolbarOptions = [
   ["bold", "italic", "underline", "strike"], // 加粗 斜体 下划线 删除线 -----['bold', 'italic', 'underline', 'strike']
   ["blockquote", "code-block"], // 引用  代码块-----['blockquote', 'code-block']
-  [{ header: 1 }, { header: 2 }], // 1、2 级标题-----[{ header: 1 }, { header: 2 }]
   [{ list: "ordered" }, { list: "bullet" }], // 有序、无序列表-----[{ list: 'ordered' }, { list: 'bullet' }]
-  [{ script: "sub" }, { script: "super" }], // 上标/下标-----[{ script: 'sub' }, { script: 'super' }]
   [{ indent: "-1" }, { indent: "+1" }], // 缩进-----[{ indent: '-1' }, { indent: '+1' }]
-  [{ direction: "rtl" }], // 文本方向-----[{'direction': 'rtl'}]
-  [{ size: ["small", false, "large", "huge"] }], // 字体大小-----[{ size: ['small', false, 'large', 'huge'] }]
-  [{ header: [1, 2, 3, 4, 5, 6, false] }], // 标题-----[{ header: [1, 2, 3, 4, 5, 6, false] }]
-  [{ color: [] }, { background: [] }], // 字体颜色、字体背景颜色-----[{ color: [] }, { background: [] }]
-  [{ font: [] }], // 字体种类-----[{ font: [] }]
-  [{ align: [] }], // 对齐方式-----[{ align: [] }]
-  ["clean"], // 清除文本格式-----['clean']
-  ["image", "video"] // 链接、图片、视频-----['link', 'image', 'video']
+  ["link", "image", "video"] // 链接、图片、视频-----['link', 'image', 'video']
 ];
 export default {
   name: "Add",
   components: { Breadcrumb, quillEditor },
   data() {
     return {
-      form: { region: "", regions: "" },
+      form: {
+        name: "",
+        subtitle: "",
+        price: "",
+        stock: "",
+        region: "",
+        categoryvalue: "",
+        regions: "",
+        categorysvalue: "",
+        subImages: "",
+        content: ""
+      },
       category: [],
       categorys: [],
+
+      disabled: false,
+
       uniqueId: "uniqueId",
       // 富文本编辑器默认内容
       content: "",
@@ -142,26 +166,45 @@ export default {
     }
   },
   methods: {
-    getData() {
-      this.$axios.look({ productId: this.$store.state.lookId }).then(res => {
-        console.log(res);
-        this.form = res.data.data;
-        console.log(this.form);
-        this.$axios.categoryId({ categoryId: 0 }).then(res => {
+    handleRemove(file) {
+      console.log(file);
+    },
+    // 一级分类
+    changeOne(val) {
+      console.log(val);
+      this.form.categoryvalue = val;
+    },
+    // er 级分类
+    changeTwo(val) {
+      console.log(val);
+      // this.form.categorysvalue = val;
+    },
+    // 提交按钮
+    onSubmit() {
+      this.$axios
+        .editSubmit({
+          categoryId: this.form.categoryId,
+          name: this.form.name,
+          subtitle: this.form.subtitle,
+          subImages: this.form.subImages,
+          detail: this.content,
+          price: this.form.price,
+          stock: this.form.stock,
+          status: 1
+        })
+        .then(res => {
           console.log(res);
-          this.category = res.data.data;
+          this.$router.push("/product");
         });
-        this.$axios
-          .categoryId({ categoryId: this.form.parentCategoryId })
-          .then(res => {
-            console.log(res);
-            this.categorys = res.data.data;
-          });
+    },
+    // 获取数据
+    getData() {
+      this.$axios.categoryId({ categoryId: 0 }).then(res => {
+        console.log(res);
+        this.category = res.data.data;
       });
     },
-    onSubmit() {
-      console.log("submit!");
-    },
+
     // 准备富文本编辑器
     onEditorReady() {},
     // 富文本编辑器 失去焦点事件

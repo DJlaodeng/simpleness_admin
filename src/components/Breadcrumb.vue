@@ -13,6 +13,7 @@
       v-if="$route.meta.name.length == 1"
       type="primary"
       icon="el-icon-plus"
+      @click="add"
       >{{ $route.meta.btn[0] }}</el-button
     >
   </section>
@@ -20,7 +21,14 @@
 
 <script>
 export default {
-  name: "Breadcrumb"
+  name: "Breadcrumb",
+  methods: {
+    add() {
+      if (this.$route.meta.btn[0] == "添加商品") {
+        this.$router.push("/ProductAdd");
+      }
+    }
+  }
 };
 </script>
 

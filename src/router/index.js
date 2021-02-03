@@ -45,8 +45,8 @@ const routes = [
         component: () => import("../views/Shop/Product/Edit.vue")
       },
       {
-        path: "/add",
-        name: "add",
+        path: "/ProductAdd",
+        name: "ProductAdd",
         meta: { name: ["商品管理", "添加商品"] },
         component: () => import("../views/Shop/Product/Add.vue")
       },
