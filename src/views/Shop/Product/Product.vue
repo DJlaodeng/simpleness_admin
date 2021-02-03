@@ -74,7 +74,7 @@
 </template>
 
 <script>
-import Breadcrumb from "../../components/Breadcrumb";
+import Breadcrumb from "../../../components/Breadcrumb";
 export default {
   name: "Product",
   components: { Breadcrumb },

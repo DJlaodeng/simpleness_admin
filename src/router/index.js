@@ -30,7 +30,7 @@ const routes = [
         path: "/product",
         name: "product",
         meta: { name: ["商品管理"], btn: ["添加商品"] },
-        component: () => import("../views/Shop/Product.vue")
+        component: () => import("../views/Shop/Product/Product.vue")
       },
       {
         path: "/detail",
@@ -53,7 +53,8 @@ const routes = [
       {
         path: "/category",
         name: "category",
-        component: () => import("../views/Shop/Category.vue")
+        meta: { name: ["品类管理"], btn: ["添加品类"] },
+        component: () => import("../views/Shop/Category/Category.vue")
       },
       {
         path: "/order",
