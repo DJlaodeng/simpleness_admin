@@ -14,5 +14,7 @@ export default {
   // 商品管理 查看 分类
   CATEGROYID: "manage/category/get_category.do?",
   // 商品管理 编辑 提交按钮
-  EDITSUBMIT: "manage/product/save.do?"
+  EDITSUBMIT: "manage/product/save.do?",
+  // 品类管理 修改名称按钮
+  EDITNAME: "manage/category/set_category_name.do?"
 };

@@ -41,6 +41,10 @@ const API = {
   editSubmit(params) {
     return request(METHODS.GET, URL.EDITSUBMIT + qs.stringify(params));
   },
+  // 商品管理 修改名称按钮
+  editName(params) {
+    return request(METHODS.GET, URL.EDITNAME + qs.stringify(params));
+  },
 
   // 注册
   register() {}
